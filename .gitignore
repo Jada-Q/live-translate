@@ -1,0 +1,6 @@
+# Swift / SPM build artifacts
+.build/
+# packaged .app output
+build/
+# macOS
+.DS_Store
