@@ -24,12 +24,14 @@ struct ControlPanel: View {
         VStack(alignment: .leading, spacing: 12) {
             Text("现场翻译").font(.headline)
 
-            Picker("", selection: $pipeline.mode) {
-                Text("自动").tag("auto")
-                Text("日→中").tag("ja")
-                Text("英→中").tag("en")
+            Picker("方向", selection: $pipeline.mode) {
+                Text("自动 外语 → 中").tag("auto")
+                Text("日 → 中").tag("ja")
+                Text("英 → 中").tag("en")
+                Text("中 → 英").tag("zh-en")
+                Text("中 → 日").tag("zh-ja")
             }
-            .pickerStyle(.segmented)
+            .pickerStyle(.menu)
             .labelsHidden()
 
             HStack(spacing: 6) {
@@ -54,6 +56,14 @@ struct ControlPanel: View {
             .controlSize(.large)
             .buttonStyle(.borderedProminent)
             .disabled(!pipeline.modelReady)
+
+            Button {
+                appDelegate.showTypeWindow()
+            } label: {
+                Text("打字翻译…").frame(maxWidth: .infinity)
+            }
+            .buttonStyle(.bordered)
+            .help("打字输入中文，翻成英文 / 日文")
 
             HStack {
                 Button("显示/隐藏字幕条") { appDelegate.toggleCaption() }

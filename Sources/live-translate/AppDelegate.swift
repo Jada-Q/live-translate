@@ -63,4 +63,25 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
     func toggleCaption() {
         if let panel, panel.isVisible { panel.orderOut(nil) } else { showCaption() }
     }
+
+    // MARK: - Type-to-translate window (separate from the live caption bar)
+
+    private var typeWindow: NSWindow?
+
+    func showTypeWindow() {
+        if typeWindow == nil {
+            let w = NSWindow(
+                contentRect: NSRect(x: 0, y: 0, width: 760, height: 420),
+                styleMask: [.titled, .closable, .miniaturizable, .resizable],
+                backing: .buffered, defer: false)
+            w.title = "打字翻译 · 中 → 英 / 日"
+            w.center()
+            w.contentView = NSHostingView(rootView: TypeView())
+            w.isReleasedWhenClosed = false
+            w.collectionBehavior.insert(.fullScreenAuxiliary)
+            typeWindow = w
+        }
+        typeWindow?.makeKeyAndOrderFront(nil)
+        NSApp.activate(ignoringOtherApps: true)
+    }
 }

@@ -9,6 +9,8 @@ struct CaptionBar: View {
     var onClose: () -> Void
     @State private var enConfig: TranslationSession.Configuration?
     @State private var jaConfig: TranslationSession.Configuration?
+    @State private var zhEnConfig: TranslationSession.Configuration?
+    @State private var zhJaConfig: TranslationSession.Configuration?
 
     var body: some View {
         VStack(alignment: .leading, spacing: 10) {
@@ -20,10 +22,10 @@ struct CaptionBar: View {
         .frame(width: 680, alignment: .leading)
         .background(.ultraThinMaterial, in: RoundedRectangle(cornerRadius: 16))
         .onAppear {
-            enConfig = .init(source: Locale.Language(identifier: "en"),
-                             target: Locale.Language(identifier: "zh-Hans"))
-            jaConfig = .init(source: Locale.Language(identifier: "ja"),
-                             target: Locale.Language(identifier: "zh-Hans"))
+            enConfig = .init(source: .init(identifier: "en"), target: .init(identifier: "zh-Hans"))
+            jaConfig = .init(source: .init(identifier: "ja"), target: .init(identifier: "zh-Hans"))
+            zhEnConfig = .init(source: .init(identifier: "zh-Hans"), target: .init(identifier: "en"))
+            zhJaConfig = .init(source: .init(identifier: "zh-Hans"), target: .init(identifier: "ja"))
         }
         .translationTask(enConfig) { session in
             for await req in pipeline.enRequests {
@@ -39,6 +41,22 @@ struct CaptionBar: View {
                     let r = try await session.translate(req.text)
                     pipeline.applyTranslation(id: req.id, text: r.targetText)
                 } catch { dbg("ja FAILED: \(error)") }
+            }
+        }
+        .translationTask(zhEnConfig) { session in
+            for await req in pipeline.zhEnRequests {
+                do {
+                    let r = try await session.translate(req.text)
+                    pipeline.applyTranslation(id: req.id, text: r.targetText)
+                } catch { dbg("zh-en FAILED: \(error)") }
+            }
+        }
+        .translationTask(zhJaConfig) { session in
+            for await req in pipeline.zhJaRequests {
+                do {
+                    let r = try await session.translate(req.text)
+                    pipeline.applyTranslation(id: req.id, text: r.targetText)
+                } catch { dbg("zh-ja FAILED: \(error)") }
             }
         }
     }
