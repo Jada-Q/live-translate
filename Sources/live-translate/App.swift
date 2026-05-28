@@ -7,9 +7,11 @@ struct LiveTranslateApp: App {
     @StateObject private var pipeline = Pipeline()
 
     var body: some Scene {
-        MenuBarExtra("现场翻译", systemImage: pipeline.isRecording ? "waveform.circle.fill" : "waveform") {
+        MenuBarExtra {
             ControlPanel(pipeline: pipeline, appDelegate: appDelegate)
                 .onAppear { appDelegate.attach(pipeline) }
+        } label: {
+            Image(nsImage: menuBarIcon())
         }
         .menuBarExtraStyle(.window)
     }
@@ -84,4 +86,39 @@ struct ControlPanel: View {
         .padding(14)
         .frame(width: 260)
     }
+}
+
+/// Hand-drawn menu-bar icon matching the app icon's speaker + sound-wave look,
+/// minus the orange squircle. Crisp at small sizes (the squircled PNG gets
+/// muddy when scaled to menu-bar height).
+private func menuBarIcon() -> NSImage {
+    let size: CGFloat = 22
+    let img = NSImage(size: NSSize(width: size, height: size), flipped: false) { _ in
+        let mid = size / 2
+
+        // speaker (dark gray, same as in the app icon)
+        NSColor(white: 0.32, alpha: 1).setFill()
+        NSBezierPath(rect: NSRect(x: 2, y: mid - 3, width: 4, height: 6)).fill()
+        let flare = NSBezierPath()
+        flare.move(to: NSPoint(x: 6,  y: mid - 3))
+        flare.line(to: NSPoint(x: 11, y: mid - 7))
+        flare.line(to: NSPoint(x: 11, y: mid + 7))
+        flare.line(to: NSPoint(x: 6,  y: mid + 3))
+        flare.close()
+        flare.fill()
+
+        // three sound-wave arcs (teal/cyan, same as app icon)
+        NSColor(srgbRed: 0.18, green: 0.65, blue: 0.82, alpha: 1).setStroke()
+        for r in [4.5, 7.0, 9.5] as [CGFloat] {
+            let arc = NSBezierPath()
+            arc.appendArc(withCenter: NSPoint(x: 11, y: mid),
+                          radius: r, startAngle: -40, endAngle: 40)
+            arc.lineWidth = 1.5
+            arc.lineCapStyle = .round
+            arc.stroke()
+        }
+        return true
+    }
+    img.isTemplate = false   // keep the speaker dark + waves teal
+    return img
 }
