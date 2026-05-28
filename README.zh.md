@@ -1,6 +1,10 @@
-# LiveTranslate · 现场翻译
+<p align="center">
+  <img src="assets/logo.png" width="160" alt="LiveTranslate">
+</p>
 
-[English](./README.md) · **中文**
+<h1 align="center">LiveTranslate · 现场翻译</h1>
+
+<p align="center"><a href="./README.md">English</a> · <b>中文</b></p>
 
 菜单栏小工具：在**中文 ⇄ 英文 / 日文**之间现场语音互译，原文 + 译文配对显示在置顶的浮动字幕条上；也支持**打字翻译**（窗口里打中文，实时翻成英 / 日）。**全程本地运行，不上传任何音频或文字。**
 

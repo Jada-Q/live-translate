@@ -1,6 +1,10 @@
-# LiveTranslate · Live Speech Translation
+<p align="center">
+  <img src="assets/logo.png" width="160" alt="LiveTranslate">
+</p>
 
-**English** · [中文](./README.zh.md)
+<h1 align="center">LiveTranslate · Live Speech Translation</h1>
+
+<p align="center"><b>English</b> · <a href="./README.zh.md">中文</a></p>
 
 A macOS menu-bar tool that live-translates speech between **Chinese ⇄ English / Japanese**. Source + translation appear as paired bilingual subtitles in an always-on-top floating bar. Also supports **type-to-translate** — type Chinese in a window, get English or Japanese in real time. **Runs entirely on-device — no audio or text ever leaves your machine.**
 
